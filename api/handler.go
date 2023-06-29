@@ -162,6 +162,12 @@ func proxy(c *gin.Context) {
 	}
 	request.Header.Set("Authorization", GetAccessTokenFromHeader(c.Request.Header))
 	request.Header.Set("user-agent", userAgent)
+	if os.Getenv("PUID") != "" {
+		request.Header.Set("cookie", "_puid="+os.Getenv("PUID")+";")
+	}
+	if c.Request.Header.Get("PUID") != "" {
+		request.Header.Set("cookie", "_puid="+c.Request.Header.Get("PUID")+";")
+	}
 
 	response, err = client.Do(request)
 	if err != nil {
